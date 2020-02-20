@@ -49,10 +49,12 @@ laporan tersebut.
 *Gunakan Awk dan Command pendukung
 
 **Jawaban**: 
----
+a)
+
+```
 a=`awk -F "\t" 'FNR == 1 {next} {totalRegion[$13]+=$21} END{for(region in totalRegion){print totalRegion[region],region}}' Sample-Superstore.tsv | sort -g | awk 'NR<2{print $2}'`
 echo 'Region dengan profit terendah adalah' $a
----
+```
 
 
 
