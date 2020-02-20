@@ -20,7 +20,7 @@ Kelompok D11
 
 Nama  : Furqan Aliyuddien
 
-NRP   : 05111840000124
+NRP   : 05111740000124
 
 
 **Departemen Teknik Informatika**
