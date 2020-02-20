@@ -27,6 +27,10 @@ NRP   : 05111740000124
 
 **Fakultas Teknik Elektro Dan Informatika Cerdas**
 
+**Insitut Teknologi Sepuluh Nopember**
+
+**Surabaya**
+
 **2020**
 
 
