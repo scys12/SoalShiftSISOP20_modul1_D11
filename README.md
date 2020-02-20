@@ -75,7 +75,9 @@ c)
 c=`awk -F "\t" -v firstState="$firstState" -v secondState="$secondState" 'FNR == 1 {next} {if($11 == firstState || $11 == secondState) totalProduct[$17]+=$21} END{for(product in totalProduct){print totalProduct[product]"->"product}}' Sample-Superstore.tsv | sort -g | awk -F "->" 'NR<11{print $2}'`
 echo -e '\n10 Produk dengan profit terendah adalah :\n'"$c"
 ```
+**Penjelasan**
 
-
+a) ```awk -F "\t"```
+Digunakan sebagai separator antar kolom yang dipisah dengan tab atau "  "
 
 
