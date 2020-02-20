@@ -84,6 +84,6 @@ a)
 
 * ``` {totalRegion[$13]+=$21} ``` Array yang bernama totalRegion memiliki indeks berupa kolom 13 dan isi dari array itu akan dijumlahkan dengan kolom 21 yang sebaris. 
 
-* ```END{for(region in totalRegion){print totalRegion[region],region}}' ```
+* ```END{for(region in totalRegion){print totalRegion[region],region}}' ``` Untuk print jumlah region yang berada pada array totalRegion beserta nama regionnya.
 
-
+* ``` Sample-Superstore.tsv | sort -g | awk 'NR<2{print $2}'` ``` Mengambil data pada Sample-Superstore.tsv, ```sort -g``` Berguna untuk sorting nilai terendah ke tertinggi ```awk 'NR<2{print $2}'``` Karena diminta untuk menampilkan hanya 1, maka digunakan sintaks NR<2 agar menampilkan baris pertama lalu print argumen kedua yaitu region.
