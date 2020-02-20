@@ -80,6 +80,10 @@ echo -e '\n10 Produk dengan profit terendah adalah :\n'"$c"
 a)
 * ``` `awk -F "\t"``` Digunakan sebagai separator antar kolom yang dipisah dengan tab atau "  "
 
-* ```FNR == 1 {next}` ``` Digunakan untuk
+* ```FNR == 1 {next}` ``` Agar baris pertama dalam Sample-Superstore.tsv tidak dihitung dalam array.
+
+* ``` {totalRegion[$13]+=$21} ``` Array yang bernama totalRegion memiliki indeks berupa kolom 13 dan isi dari array itu akan dijumlahkan dengan kolom 21 yang sebaris. 
+
+* ```END{for(region in totalRegion){print totalRegion[region],region}}' ```
 
 
