@@ -78,8 +78,8 @@ echo -e '\n10 Produk dengan profit terendah adalah :\n'"$c"
 **Penjelasan**
 
 a)
-``` `awk -F "\t"``` Digunakan sebagai separator antar kolom yang dipisah dengan tab atau "  "
+* ``` `awk -F "\t"``` Digunakan sebagai separator antar kolom yang dipisah dengan tab atau "  "
 
-```FNR == 1 {next}` ``` Digunakan untuk
+* ```FNR == 1 {next}` ``` Digunakan untuk
 
 
