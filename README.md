@@ -1,7 +1,4 @@
-# -SoalShiftSISOP20_modul1_D11
---- LAPORAN RESMI SISTEM OPERASI ---
-
-Kelompok : D11
+# Laporan Resmi Sistem Operasi
 
 **Anggota Kelompok**
 
@@ -11,12 +8,13 @@ NRP   : 05111840000036
 
 Kelas : Sistem Operasi - D
 
-
 Nama  : Ryukazu Andara S
 
 NRP   : 05111840000129
 
 Kelas : Sistem Operasi - D
+
+Kelompok D11
 
 **Asisten**
 
