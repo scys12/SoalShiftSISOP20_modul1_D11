@@ -83,7 +83,7 @@ a)
 
 * ```{for(region in totalRegion){print totalRegion[region],region}}' ``` Untuk print jumlah region yang berada pada array totalRegion beserta nama regionnya saja.
 
-* ``` Sample-Superstore.tsv Mengambil data pada Sample-Superstore.tsv, 
+* ``` Sample-Superstore.tsv``` Mengambil data pada Sample-Superstore.tsv, 
 
 * ```sort -g``` Berguna untuk sorting nilai terendah ke tertinggi
 * ```awk 'NR<2{print $2}'``` Karena diminta untuk menampilkan hanya 1, maka digunakan sintaks NR<2 agar menampilkan profit yang terendah lalu print argumen kedua yaitu region.
@@ -109,14 +109,19 @@ c)
 
 * ``` -v secondState="$secondState" ``` Untuk memberi akses awk kepada variabel secondState dengan nilai dari secondState (soal 1b)
 
-* ``` {if($11 == firstState || $11 == secondState) totalProduct[$17]+=$21} ``` Cek apakah $11 merupakan 
+* ``` {if($11 == firstState || $11 == secondState) totalProduct[$17]+=$21} ``` Cek apakah $11 sama dengan nilai dari firstState atau secondState kemudian array bernama totalProduct dengan indeks kolom 17 dijumlahkan dengan kolom 21 yang sebaris. 
+
+* ``` {for(product in totalProduct){print totalProduct[product]"->"product}}' ```
+
+* ``` awk -F "->" 'NR<11{print $2}' ``` 
 
 **Poin-Poin**
+---
 
 * ``` `awk -F "\t"``` Digunakan sebagai separator antar kolom yang dipisah dengan tab atau "  "
 
 * ``` 'FNR == 1 {next}``` Agar baris pertama dalam Sample-Superstore.tsv tidak dihitung dalam array.
 
-* ```sort -g```
+* ```sort -g``` Sorting nilai terendah ke tertinggi
 
 * ```END``` Digunakan agar kode dijalankan hanya sekali saja
