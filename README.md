@@ -64,6 +64,12 @@ a=`awk -F "\t" 'FNR == 1 {next} {totalRegion[$13]+=$21}
 echo 'Region dengan profit terendah adalah' $a
 ```
 
+```awk -F "\t"``` berguna untuk menjadi separator antar kolom yang dipisahkan dengan tab, lalu ```’FNR == 1 {next} ``` digunakan agar baris pertama dalam Sample-Superstore.tsv tidak diikutkan dalam proses operasi awk ```{totalRegion[$13]+=$21} 
+    END{for(region in totalRegion){print totalRegion[region],region}}' 
+        Sample-Superstore.tsv | ``` yaitu pada data Sample-Superstore.tsv dilakukan proses yang dimulai dari array yang bernama totalRegion memiliki indeks berupa kolom 13 dan isi dari array tersebut akan dijumlahkan dengan kolom 21 yang sebaris. Lalu terdapat perintah looping dengan menggunakan indeks region dalam array totalRegion, setelah itu akan dicetak isi dari array totalRegion berindeks region beserta nama regionnya. ```END``` berfungsi agar kode hanya dijalankan satu kali saja. Setelah proses tersebut selesai, maka dilakukan sorting menggunakan ``` sort –g | ``` untuk mengurutkan nilai terendah ke nilai tertinggi, setelah diurutkan maka akan ditampilkan hanya 1 baris, dan kan mencetak argumen kedua yaitu nama regionnya saja dengan sintaks ```awk 'NR<2{print $2}' ``` .
+
+
+
 b)
 ```bash
 b=`awk -F "\t" -v resultA="$a" 'FNR == 1 {next} {if($13 ==resultA) totalState[$11]+=$21} 
@@ -75,6 +81,9 @@ secondState=`echo "$b" | sed -n "2p"`
 echo -e '\n2 State dengan profit terendah adalah'  $firstState "dan" $secondState
 ```
 
+```awk -F "\t"``` berguna untuk menjadi separator antar kolom yang dipisahkan dengan tab lalu digunakan ```-v resultA="$a"``` untuk memberi akses awk kepada variabel resultA dengan nilai a yang didapat dari soal nomor 1a. Kemudian ```’FNR == 1{next} ``` digunakan agar baris pertama dalam Sample-Superstore.tsv tidak diikutkan dalam proses operasi awk lalu untuk ```{if($13 ==resultA) totalState[$11]+=$21}``` berguna untuk cek apakah $13 itu sama dengan hasil dari resultA, kemudian sebuah array yang bernama totalState dengan indeks kolom 11 yang kemudian dijumlahkan dengan kolom 21 yang sebaris. Lalu dilakukan looping dengan ```{for(state in totalState){print totalState[state],state}}' Sample-Superstore.tsv```  menggunakan indeks state dalam array totalState, setelah itu akan dicetak isi dari array totalState berindeks state beserta nama regionnya. ```END``` berfungsi agar kode dijalankan sekali saja. Ketika kode telah dijalankan, maka dilanjutkan dengan sorting menggunakan ``` sort –g |``` untuk mengurutkan nilai dari yang terendah ke nilai tertinggi. Ketika sudah diurutkan maka dilakukan ```awk ‘NR<3{print $2}’``` untuk melakukan print argumen kedua pada 2 baris teratas. ```firstState=`echo "$b" | sed -n "1p"` dan secondState=`echo "$b" | sed -n "2p"``` untuk menampilkan baris pertama dan keduanya.
+
+
 c)
 ```bash
 c=`awk -F "\t" -v firstState="$firstState" -v secondState="$secondState" 'FNR == 1 {next} 
@@ -83,53 +92,11 @@ c=`awk -F "\t" -v firstState="$firstState" -v secondState="$secondState" 'FNR ==
             Sample-Superstore.tsv | sort -g | awk -F "==" 'NR<11{print $2}'`
 echo -e '\n10 Produk dengan profit terendah adalah :\n'"$c"
 ```
-**Penjelasan**
----
 
-a)
+```awk –F “\t” ``` berguna untuk menjadi separator antar kolom yang dipisahkan dengan tab lalu digunakan ```-v firstState="$firstState" -v secondState="$secondState"``` untuk memberi akses awk kepada variabel firstState dan variabel secondState dengan nilai firstState dan secondState dari soal 1b. ```'FNR == 1 {next} ``` digunakan agar baris pertama dalam Sample-Superstore.tsv tidak diikutkan dalam proses operasi awk lalu untuk ```{if($11 == firstState || $11 == secondState) totalProduct[$17]+=$21} 
+        END{for(product in totalProduct){print totalProduct[product]"=="product}}' 
+            Sample-Superstore.tsv | ``` potongan kode tersebut dimulai dari proses pengecekan apakah kolom 11 sama dengan nilai dari firstState dan secondState kemudian array bernama totalProduct dengan indeks kolom 17 dijumlahkan dengan kolom 21 yang sebaris. Selanjutnya dilakukan looping dengan menggunakan indeks product dalam array totalProduct, yang kemudian akan dicetak isi dari array totalProduct dengan indeks product beserta nama productnya dengan pemisah berupa “==”, kemudian dilakukan sorting menggunakan sintaks ``` sort –g |``` untuk mengurutkan nilai terendah ke nilai tertinggi.``` awk -F "==" 'NR<11{print $2}'``` berguna untuk separator antar kolom yang dipisahkan dengan “==” kemudian print argumen kedua yang berada di 10 baris pertama.
 
-* ``` {totalRegion[$13]+=$21} ``` Array yang bernama totalRegion memiliki indeks berupa kolom 13 dan isi dari array itu akan dijumlahkan dengan kolom 21 yang sebaris. 
-
-* ```{for(region in totalRegion){print totalRegion[region],region}}' ``` Perintah ini berguna untuk looping dengan menggunakan indeks region dalam array totalRegion, setelah itu akan dicetak isi dari array totalRegion berindeks region beserta nama regionnya. 
-
-* ```awk 'NR<2{print $2}'``` Karena diminta untuk menampilkan hanya 1, maka digunakan sintaks NR<2 agar menampilkan profit yang terendah lalu print argumen kedua yaitu region.
-
-* ```echo 'Region dengan profit terendah adalah' $a``` Print hasil dari a
-
-b)
-
-* ``` -v resultA="$a" ``` Untuk memberi akses awk kepada variabel resultA dengan nilai a (dari soal 1a)
-
-* ```{if($13 ==resultA) totalState[$11]+=$21} ```Digunakan untuk mengecek apakah $13 itu sama dengan hasil dari resultA, kemudian sebuah array yang bernama totalState dengan indeks kolom 11 yang kemudian dijumlahkan dengan kolom 21 yang sebaris.
-
-* ```{for(state in totalState){print totalState[state],state}}'``` Untuk print jumlah state yang berada pada array totalState dan print nama statenya saja
-
-* ```awk 'NR<3{print $2}'```Berguna untuk menampilkan 2 baris teratas lalu print argumen kedua yang merupakan nama state
-
-* ``` firstState=`echo "$b" | sed -n "1p"``` Menampilkan baris pertama
-* ``` secondState=`echo "$b" | sed -n "2p"``` Menampilkan baris kedua
-
-c)
-* ``` -v firstState="$firstState ``` Untuk memberi akses awk kepada variabel firstState dengan nilai dari firstState (soal 1b)
-
-* ``` -v secondState="$secondState" ``` Untuk memberi akses awk kepada variabel secondState dengan nilai dari secondState (soal 1b)
-
-* ``` {if($11 == firstState || $11 == secondState) totalProduct[$17]+=$21} ``` Cek apakah $11 sama dengan nilai dari firstState atau secondState kemudian array bernama totalProduct dengan indeks kolom 17 dijumlahkan dengan kolom 21 yang sebaris. 
-
-* ``` {for(product in totalProduct){print totalProduct[product]"->"product}}' ```
-
-* ``` awk -F "->" 'NR<11{print $2}' ``` 
-
-**Poin-Poin**
----
-
-* ``` `awk -F "\t"``` Digunakan sebagai separator antar kolom yang dipisah dengan tab atau "  "
-
-* ``` 'FNR == 1 {next}``` Agar baris pertama dalam Sample-Superstore.tsv tidak diikutkan dalam operasi awk.
-
-* ```sort -g``` Sorting nilai terendah ke tertinggi
-
-* ```END``` Digunakan agar kode dijalankan hanya sekali saja
 
 2. Pada suatu siang, laptop Randolf dan Afairuzr dibajak oleh seseorang dan kehilangan
 data-data penting. Untuk mencegah kejadian yang sama terulang kembali mereka
@@ -345,4 +312,21 @@ for num in "${loc[@]}"; do
     mv $newName "duplicate/"
 done
 ```
-berguna untuk mengekstrak setiap array untuk diambil angkanya, setelah itu merubah nama dengan 
+berguna untuk mengekstrak setiap array untuk diambil angkanya dan disimpan di variable fileNumber, setelah itu menampilkan semua file yang memiliki angka sesuai dengan variable filNumber dan ditaruh di variable nameFile, lalu diganti namanya menjadi duplicate_filenumber. Setelah itu dibuat direktori bernama duplicate jika belum ada dan dipindahkan file ke direktori duplicate
+
+```
+for file in pdkt_kusuma_*
+do
+    fileNumber=`echo $file | sed "s/[^0-9]//g"`
+    newName="kenangan_$fileNumber"
+    mv $file $newName
+    if [[ ! -d "$curr/kenangan" ]]; then
+	    mkdir kenangan
+    fi
+    mv $newName "kenangan/"
+done
+mv "wget.log" "wget.log.bak"
+
+```
+
+berguna untuk memilih file yang bernama ```pdkt_kusuma_```. variable fileNumber akan berisi dengan angka yang ada di nama file yang sedang dipilih yang berada di variable newName. lalu file akan diganti namanya menjadi kenangan_fileNumber dan dibuat direktori baru jika belum ada dan file yang sedang dipilih akan dipindah ke direktori baru tersebut. Lalu setelah semua proses selesai, file wget.log akan diganti menjadi wget.log.bak
