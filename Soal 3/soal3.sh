@@ -1,3 +1,5 @@
+#!/bin/bash
+
 lastNumber=$(ls | sed 's/pdkt_kusuma_//' | sort -n | tail -1)
 if [[ !($lastNumber =~ [0-9]) ]];then 
     lastNumber=0
