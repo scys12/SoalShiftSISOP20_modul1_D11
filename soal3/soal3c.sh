@@ -1,3 +1,5 @@
+#!/bin/bash
+
 curr=$(pwd)
 loc=($(awk -F "/" '/^Location: /{ url[i++] = $4 }/Saving to: /{ filename[j++] = $NF }
     END{for(k=0;k<i;k++)print url[k]","filename[k]}' wget.log | awk -F "," 'a[$1]++{print $2}' | sed 's/Saving to: //g'))
