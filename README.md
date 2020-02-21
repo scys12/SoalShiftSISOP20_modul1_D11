@@ -77,6 +77,7 @@ c=`awk -F "\t" -v firstState="$firstState" -v secondState="$secondState" 'FNR ==
 echo -e '\n10 Produk dengan profit terendah adalah :\n'"$c"
 ```
 **Penjelasan**
+---
 
 a)
 
