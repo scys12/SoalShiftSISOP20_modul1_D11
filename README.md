@@ -35,6 +35,7 @@ NRP   : 05111740000124
 
 **Soal :** 
 ---
+
 1. Whits adalah seorang mahasiswa teknik informatika. Dia mendapatkan tugas praktikum
 untuk membuat laporan berdasarkan data yang ada pada file “Sample-Superstore.tsv”.
 Namun dia tidak dapat menyelesaikan tugas tersebut. Laporan yang diminta berupa :
@@ -106,6 +107,9 @@ echo -e '\n10 Produk dengan profit terendah adalah :\n'"$c"
             Sample-Superstore.tsv | ``` potongan kode tersebut dimulai dari proses pengecekan apakah kolom 11 sama dengan nilai dari firstState dan secondState kemudian array bernama totalProduct dengan indeks kolom 17 dijumlahkan dengan kolom 21 yang sebaris. Selanjutnya dilakukan looping dengan menggunakan indeks product dalam array totalProduct, yang kemudian akan dicetak isi dari array totalProduct dengan indeks product beserta nama productnya dengan pemisah berupa “==”, kemudian dilakukan sorting menggunakan sintaks ``` sort –g |``` untuk mengurutkan nilai terendah ke nilai tertinggi.``` awk -F "==" 'NR<11{print $2}'``` berguna untuk separator antar kolom yang dipisahkan dengan “==” kemudian print argumen kedua yang berada di 10 baris pertama.
 
 
+**Soal :** 
+---
+
 2. Pada suatu siang, laptop Randolf dan Afairuzr dibajak oleh seseorang dan kehilangan
 data-data penting. Untuk mencegah kejadian yang sama terulang kembali mereka
 meminta bantuan kepada Whits karena dia adalah seorang yang punya banyak ide.
@@ -168,6 +172,10 @@ Dekripsi:
 ``` dateModified=`date -r $1 "+%H"` ``` berguna untuk mengekstrak jam yang ada file bernama argumen 1 dimana jam yang diekstrak berupa jam terakhir file dimodifikasi untuk disimpan ke variable ```dateModified```. Disini variabel ```dateModified``` menginterpretasi jam sebagai bilangan oktal untuk jam 00-09 dan bilangan oktal hanya berlaku untuk digit 0-7. Jika kita mengakses pada jam 08-09 akan terjadi error sehingga untuk mengatasinya ditambah ``` dateModified=10#$dateModified ``` untuk membuat variable ```dateModified``` untuk menghilangkan angka 0 didepan. ``` filename=${1%.txt} ``` untuk mengambil nama file tanpa menyertakan ekstensinya yaitu .txt.
 
 Lalu bagian ``` rotation=$((26-(${dateModified} % 26))) ``` berguna untuk melakukan operator aritmatika variable ```dateModified``` modulo 26 lalu hasilnya dikurangi 26(Konsep dekripsi ini bukan untuk mengurangi huruf dengan bilangan yang ada di variable ```rotation``` tapi untuk menambah huruf dengan ```rotation```( bilangan 26 dikurangi variable ```dateModified```)). ``` padding=$(printf "%${rotation}s") ``` berguna untuk membuat variable ``` padding ``` menyimpan hasil. ``` tr "${padding}a-z" "a-za-z" | tr "${padding}A-Z" "A-ZA-Z") ``` berguna untuk merubah isi dari variable ```filename```. Huruf di variable ```filename``` akan tershift dengan cara menambahkan huruf dengan variable ```padding``` dan disimpan di variable ```newFileName```. ```newFileName=$newFileName.txt``` akan ditambahkan ekstensi .txt dibelakang isi variable ```newFileName```. ``` mv $1 $newFileName ``` akan merubah nama file yang ada di argumen 1 menjadi  isi dari  variable```newFileName```.
+
+
+**Soal :** 
+---
 
 3. 1 tahun telah berlalu sejak pencampakan hati Kusuma. Akankah sang pujaan hati
 kembali ke naungan Kusuma? Memang tiada maaf bagi Elen. Tapi apa daya hati yang
