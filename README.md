@@ -64,10 +64,12 @@ a=`awk -F "\t" 'FNR == 1 {next} {totalRegion[$13]+=$21}
 echo 'Region dengan profit terendah adalah' $a
 ```
 
+**Penjelasan**
+---
+
 ```awk -F "\t"``` berguna untuk menjadi separator antar kolom yang dipisahkan dengan tab, lalu ```’FNR == 1 {next} ``` digunakan agar baris pertama dalam Sample-Superstore.tsv tidak diikutkan dalam proses operasi awk ```{totalRegion[$13]+=$21} 
     END{for(region in totalRegion){print totalRegion[region],region}}' 
         Sample-Superstore.tsv | ``` yaitu pada data Sample-Superstore.tsv dilakukan proses yang dimulai dari array yang bernama totalRegion memiliki indeks berupa kolom 13 dan isi dari array tersebut akan dijumlahkan dengan kolom 21 yang sebaris. Lalu terdapat perintah looping dengan menggunakan indeks region dalam array totalRegion, setelah itu akan dicetak isi dari array totalRegion berindeks region beserta nama regionnya. ```END``` berfungsi agar kode hanya dijalankan satu kali saja. Setelah proses tersebut selesai, maka dilakukan sorting menggunakan ``` sort –g | ``` untuk mengurutkan nilai terendah ke nilai tertinggi, setelah diurutkan maka akan ditampilkan hanya 1 baris, dan kan mencetak argumen kedua yaitu nama regionnya saja dengan sintaks ```awk 'NR<2{print $2}' ``` .
-
 
 
 b)
@@ -81,6 +83,9 @@ secondState=`echo "$b" | sed -n "2p"`
 echo -e '\n2 State dengan profit terendah adalah'  $firstState "dan" $secondState
 ```
 
+**Penjelasan**
+---
+
 ```awk -F "\t"``` berguna untuk menjadi separator antar kolom yang dipisahkan dengan tab lalu digunakan ```-v resultA="$a"``` untuk memberi akses awk kepada variabel resultA dengan nilai a yang didapat dari soal nomor 1a. Kemudian ```’FNR == 1{next} ``` digunakan agar baris pertama dalam Sample-Superstore.tsv tidak diikutkan dalam proses operasi awk lalu untuk ```{if($13 ==resultA) totalState[$11]+=$21}``` berguna untuk cek apakah $13 itu sama dengan hasil dari resultA, kemudian sebuah array yang bernama totalState dengan indeks kolom 11 yang kemudian dijumlahkan dengan kolom 21 yang sebaris. Lalu dilakukan looping dengan ```{for(state in totalState){print totalState[state],state}}' Sample-Superstore.tsv```  menggunakan indeks state dalam array totalState, setelah itu akan dicetak isi dari array totalState berindeks state beserta nama regionnya. ```END``` berfungsi agar kode dijalankan sekali saja. Ketika kode telah dijalankan, maka dilanjutkan dengan sorting menggunakan ``` sort –g |``` untuk mengurutkan nilai dari yang terendah ke nilai tertinggi. Ketika sudah diurutkan maka dilakukan ```awk ‘NR<3{print $2}’``` untuk melakukan print argumen kedua pada 2 baris teratas. ```firstState=`echo "$b" | sed -n "1p"` dan secondState=`echo "$b" | sed -n "2p"``` untuk menampilkan baris pertama dan keduanya.
 
 
@@ -92,6 +97,9 @@ c=`awk -F "\t" -v firstState="$firstState" -v secondState="$secondState" 'FNR ==
             Sample-Superstore.tsv | sort -g | awk -F "==" 'NR<11{print $2}'`
 echo -e '\n10 Produk dengan profit terendah adalah :\n'"$c"
 ```
+
+**Penjelasan**
+---
 
 ```awk –F “\t” ``` berguna untuk menjadi separator antar kolom yang dipisahkan dengan tab lalu digunakan ```-v firstState="$firstState" -v secondState="$secondState"``` untuk memberi akses awk kepada variabel firstState dan variabel secondState dengan nilai firstState dan secondState dari soal 1b. ```'FNR == 1 {next} ``` digunakan agar baris pertama dalam Sample-Superstore.tsv tidak diikutkan dalam proses operasi awk lalu untuk ```{if($11 == firstState || $11 == secondState) totalProduct[$17]+=$21} 
         END{for(product in totalProduct){print totalProduct[product]"=="product}}' 
