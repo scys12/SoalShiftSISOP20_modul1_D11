@@ -33,8 +33,8 @@ NRP   : 05111740000124
 
 **2020**
 
-Soal : 
-
+**Soal :** 
+---
 1. Whits adalah seorang mahasiswa teknik informatika. Dia mendapatkan tugas praktikum
 untuk membuat laporan berdasarkan data yang ada pada file “Sample-Superstore.tsv”.
 Namun dia tidak dapat menyelesaikan tugas tersebut. Laporan yang diminta berupa :
@@ -53,6 +53,7 @@ laporan tersebut.
 *Gunakan Awk dan Command pendukung*
 
 **Jawaban**: 
+---
 
 a)
 
