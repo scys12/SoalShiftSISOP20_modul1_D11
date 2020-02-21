@@ -175,3 +175,13 @@ newFileName=$(echo "$filename" | tr "${padding}a-z" "a-za-z" | tr "${padding}A-Z
 newFileName=$newFileName.txt
 mv $1 $newFileName
 ```
+**Penjelasan**
+---
+Enkripsi: 
+* ```create=`date '+%H'``` Untuk mengetahui waktu pembuatan file kemudian disimpan dalam variable create
+
+* ```filename=${1%.txt}``` Membuat sebuah variabel yang bernama filename yang berisikan nama file yang dibuat dengan 1% untuk menyimpan argumen yang diinputkan.
+
+* ``` rotation=$((${create} % 26)) ```
+
+* ```padding=$(printf "%${rotation}s")```
