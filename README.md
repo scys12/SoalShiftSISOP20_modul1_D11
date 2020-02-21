@@ -78,12 +78,45 @@ echo -e '\n10 Produk dengan profit terendah adalah :\n'"$c"
 **Penjelasan**
 
 a)
-* ``` `awk -F "\t"``` Digunakan sebagai separator antar kolom yang dipisah dengan tab atau "  "
-
-* ```FNR == 1 {next}` ``` Agar baris pertama dalam Sample-Superstore.tsv tidak dihitung dalam array.
 
 * ``` {totalRegion[$13]+=$21} ``` Array yang bernama totalRegion memiliki indeks berupa kolom 13 dan isi dari array itu akan dijumlahkan dengan kolom 21 yang sebaris. 
 
-* ```END{for(region in totalRegion){print totalRegion[region],region}}' ``` Untuk print jumlah region yang berada pada array totalRegion beserta nama regionnya.
+* ```{for(region in totalRegion){print totalRegion[region],region}}' ``` Untuk print jumlah region yang berada pada array totalRegion beserta nama regionnya saja.
 
-* ``` Sample-Superstore.tsv | sort -g | awk 'NR<2{print $2}'` ``` Mengambil data pada Sample-Superstore.tsv, ```sort -g``` Berguna untuk sorting nilai terendah ke tertinggi ```awk 'NR<2{print $2}'``` Karena diminta untuk menampilkan hanya 1, maka digunakan sintaks NR<2 agar menampilkan baris pertama lalu print argumen kedua yaitu region.
+* ``` Sample-Superstore.tsv Mengambil data pada Sample-Superstore.tsv, 
+
+* ```sort -g``` Berguna untuk sorting nilai terendah ke tertinggi
+* ```awk 'NR<2{print $2}'``` Karena diminta untuk menampilkan hanya 1, maka digunakan sintaks NR<2 agar menampilkan profit yang terendah lalu print argumen kedua yaitu region.
+
+* ```echo 'Region dengan profit terendah adalah' $a``` Print hasil dari a
+
+b)
+* ``` awk -F "\t" ``` Digunakan sebagai separator antar kolom yang dipisah dengan tab atau "  "
+
+* ``` -v resultA="$a" ``` Untuk memberi akses awk kepada variabel resultA dengan nilai a (dari soal 1a)
+
+* ```{if($13 ==resultA) totalState[$11]+=$21} ```Digunakan untuk mengecek apakah $13 itu sama dengan hasil dari resultA, kemudian sebuah array yang bernama totalState dengan indeks kolom 11 yang kemudian dijumlahkan dengan kolom 21 yang sebaris.
+
+* ```{for(state in totalState){print totalState[state],state}}'``` Untuk print jumlah state yang berada pada array totalState dan print nama statenya saja
+
+* ```awk 'NR<3{print $2}'```Berguna untuk menampilkan 2 baris teratas lalu print argumen kedua yang merupakan nama state
+
+* ``` firstState=`echo "$b" | sed -n "1p"``` Menampilkan baris pertama
+* ``` secondState=`echo "$b" | sed -n "2p"``` Menampilkan baris kedua
+
+c)
+* ``` -v firstState="$firstState ``` Untuk memberi akses awk kepada variabel firstState dengan nilai dari firstState (soal 1b)
+
+* ``` -v secondState="$secondState" ``` Untuk memberi akses awk kepada variabel secondState dengan nilai dari secondState (soal 1b)
+
+* ``` {if($11 == firstState || $11 == secondState) totalProduct[$17]+=$21} ``` Cek apakah $11 merupakan 
+
+**Poin-Poin**
+
+* ``` `awk -F "\t"``` Digunakan sebagai separator antar kolom yang dipisah dengan tab atau "  "
+
+* ``` 'FNR == 1 {next}``` Agar baris pertama dalam Sample-Superstore.tsv tidak dihitung dalam array.
+
+* ```sort -g```
+
+* ```END``` Digunakan agar kode dijalankan hanya sekali saja
