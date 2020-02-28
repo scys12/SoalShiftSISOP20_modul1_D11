@@ -35,6 +35,7 @@ NRP   : 05111740000124
 
 **Soal :** 
 ---
+
 1. Whits adalah seorang mahasiswa teknik informatika. Dia mendapatkan tugas praktikum
 untuk membuat laporan berdasarkan data yang ada pada file “Sample-Superstore.tsv”.
 Namun dia tidak dapat menyelesaikan tugas tersebut. Laporan yang diminta berupa :
@@ -64,10 +65,12 @@ a=`awk -F "\t" 'FNR == 1 {next} {totalRegion[$13]+=$21}
 echo 'Region dengan profit terendah adalah' $a
 ```
 
+**Penjelasan**
+---
+
 ```awk -F "\t"``` berguna untuk menjadi separator antar kolom yang dipisahkan dengan tab, lalu ```’FNR == 1 {next} ``` digunakan agar baris pertama dalam Sample-Superstore.tsv tidak diikutkan dalam proses operasi awk ```{totalRegion[$13]+=$21} 
     END{for(region in totalRegion){print totalRegion[region],region}}' 
         Sample-Superstore.tsv | ``` yaitu pada data Sample-Superstore.tsv dilakukan proses yang dimulai dari array yang bernama totalRegion memiliki indeks berupa kolom 13 dan isi dari array tersebut akan dijumlahkan dengan kolom 21 yang sebaris. Lalu terdapat perintah looping dengan menggunakan indeks region dalam array totalRegion, setelah itu akan dicetak isi dari array totalRegion berindeks region beserta nama regionnya. ```END``` berfungsi agar kode hanya dijalankan satu kali saja. Setelah proses tersebut selesai, maka dilakukan sorting menggunakan ``` sort –g | ``` untuk mengurutkan nilai terendah ke nilai tertinggi, setelah diurutkan maka akan ditampilkan hanya 1 baris, dan kan mencetak argumen kedua yaitu nama regionnya saja dengan sintaks ```awk 'NR<2{print $2}' ``` .
-
 
 
 b)
@@ -81,6 +84,9 @@ secondState=`echo "$b" | sed -n "2p"`
 echo -e '\n2 State dengan profit terendah adalah'  $firstState "dan" $secondState
 ```
 
+**Penjelasan**
+---
+
 ```awk -F "\t"``` berguna untuk menjadi separator antar kolom yang dipisahkan dengan tab lalu digunakan ```-v resultA="$a"``` untuk memberi akses awk kepada variabel resultA dengan nilai a yang didapat dari soal nomor 1a. Kemudian ```’FNR == 1{next} ``` digunakan agar baris pertama dalam Sample-Superstore.tsv tidak diikutkan dalam proses operasi awk lalu untuk ```{if($13 ==resultA) totalState[$11]+=$21}``` berguna untuk cek apakah $13 itu sama dengan hasil dari resultA, kemudian sebuah array yang bernama totalState dengan indeks kolom 11 yang kemudian dijumlahkan dengan kolom 21 yang sebaris. Lalu dilakukan looping dengan ```{for(state in totalState){print totalState[state],state}}' Sample-Superstore.tsv```  menggunakan indeks state dalam array totalState, setelah itu akan dicetak isi dari array totalState berindeks state beserta nama regionnya. ```END``` berfungsi agar kode dijalankan sekali saja. Ketika kode telah dijalankan, maka dilanjutkan dengan sorting menggunakan ``` sort –g |``` untuk mengurutkan nilai dari yang terendah ke nilai tertinggi. Ketika sudah diurutkan maka dilakukan ```awk ‘NR<3{print $2}’``` untuk melakukan print argumen kedua pada 2 baris teratas. ```firstState=`echo "$b" | sed -n "1p"` dan secondState=`echo "$b" | sed -n "2p"``` untuk menampilkan baris pertama dan keduanya.
 
 
@@ -93,10 +99,16 @@ c=`awk -F "\t" -v firstState="$firstState" -v secondState="$secondState" 'FNR ==
 echo -e '\n10 Produk dengan profit terendah adalah :\n'"$c"
 ```
 
+**Penjelasan**
+---
+
 ```awk –F “\t” ``` berguna untuk menjadi separator antar kolom yang dipisahkan dengan tab lalu digunakan ```-v firstState="$firstState" -v secondState="$secondState"``` untuk memberi akses awk kepada variabel firstState dan variabel secondState dengan nilai firstState dan secondState dari soal 1b. ```'FNR == 1 {next} ``` digunakan agar baris pertama dalam Sample-Superstore.tsv tidak diikutkan dalam proses operasi awk lalu untuk ```{if($11 == firstState || $11 == secondState) totalProduct[$17]+=$21} 
         END{for(product in totalProduct){print totalProduct[product]"=="product}}' 
             Sample-Superstore.tsv | ``` potongan kode tersebut dimulai dari proses pengecekan apakah kolom 11 sama dengan nilai dari firstState dan secondState kemudian array bernama totalProduct dengan indeks kolom 17 dijumlahkan dengan kolom 21 yang sebaris. Selanjutnya dilakukan looping dengan menggunakan indeks product dalam array totalProduct, yang kemudian akan dicetak isi dari array totalProduct dengan indeks product beserta nama productnya dengan pemisah berupa “==”, kemudian dilakukan sorting menggunakan sintaks ``` sort –g |``` untuk mengurutkan nilai terendah ke nilai tertinggi.``` awk -F "==" 'NR<11{print $2}'``` berguna untuk separator antar kolom yang dipisahkan dengan “==” kemudian print argumen kedua yang berada di 10 baris pertama.
 
+
+**Soal :** 
+---
 
 2. Pada suatu siang, laptop Randolf dan Afairuzr dibajak oleh seseorang dan kehilangan
 data-data penting. Untuk mencegah kejadian yang sama terulang kembali mereka
@@ -160,6 +172,10 @@ Dekripsi:
 ``` dateModified=`date -r $1 "+%H"` ``` berguna untuk mengekstrak jam yang ada file bernama argumen 1 dimana jam yang diekstrak berupa jam terakhir file dimodifikasi untuk disimpan ke variable ```dateModified```. Disini variabel ```dateModified``` menginterpretasi jam sebagai bilangan oktal untuk jam 00-09 dan bilangan oktal hanya berlaku untuk digit 0-7. Jika kita mengakses pada jam 08-09 akan terjadi error sehingga untuk mengatasinya ditambah ``` dateModified=10#$dateModified ``` untuk membuat variable ```dateModified``` untuk menghilangkan angka 0 didepan. ``` filename=${1%.txt} ``` untuk mengambil nama file tanpa menyertakan ekstensinya yaitu .txt.
 
 Lalu bagian ``` rotation=$((26-(${dateModified} % 26))) ``` berguna untuk melakukan operator aritmatika variable ```dateModified``` modulo 26 lalu hasilnya dikurangi 26(Konsep dekripsi ini bukan untuk mengurangi huruf dengan bilangan yang ada di variable ```rotation``` tapi untuk menambah huruf dengan ```rotation```( bilangan 26 dikurangi variable ```dateModified```)). ``` padding=$(printf "%${rotation}s") ``` berguna untuk membuat variable ``` padding ``` menyimpan hasil. ``` tr "${padding}a-z" "a-za-z" | tr "${padding}A-Z" "A-ZA-Z") ``` berguna untuk merubah isi dari variable ```filename```. Huruf di variable ```filename``` akan tershift dengan cara menambahkan huruf dengan variable ```padding``` dan disimpan di variable ```newFileName```. ```newFileName=$newFileName.txt``` akan ditambahkan ekstensi .txt dibelakang isi variable ```newFileName```. ``` mv $1 $newFileName ``` akan merubah nama file yang ada di argumen 1 menjadi  isi dari  variable```newFileName```.
+
+
+**Soal :** 
+---
 
 3. 1 tahun telah berlalu sejak pencampakan hati Kusuma. Akankah sang pujaan hati
 kembali ke naungan Kusuma? Memang tiada maaf bagi Elen. Tapi apa daya hati yang
