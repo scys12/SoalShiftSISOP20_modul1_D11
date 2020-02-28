@@ -7,4 +7,22 @@ rotation=$((${create} % 26))
 padding=$(printf "%${rotation}s")
 newFileName=$(echo "$filename" | tr "${padding}a-z" "a-za-z" | tr "${padding}A-Z" "A-ZA-Z")
 newFileName=$newFileName.txt
-head /dev/urandom | tr -dc A-Za-z0-9 | head -c28 > $newFileName
+for((i=1;i<=3;i++))
+do
+    if (( $i % 3 == 1 ))
+    then
+        char=`head /dev/urandom | tr -dc A-Z| head -c 1`
+        password+=$char
+    fi
+    if (( $i % 3 == 2 ))
+    then
+        char=`head /dev/urandom | tr -dc a-z| head -c 1`
+        password+=$char
+    fi
+    if (( $i % 3 == 0 ))
+    then
+        char=`head /dev/urandom | tr -dc 0-9| head -c 1`
+        password+=$char
+    fi
+done
+echo "$password" > $newFileName
