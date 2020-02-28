@@ -33,21 +33,20 @@ NRP   : 05111740000124
 
 **2020**
 
-**Soal :** 
+**Soal 1:** 
 ---
-
-1. Whits adalah seorang mahasiswa teknik informatika. Dia mendapatkan tugas praktikum
+Whits adalah seorang mahasiswa teknik informatika. Dia mendapatkan tugas praktikum
 untuk membuat laporan berdasarkan data yang ada pada file “Sample-Superstore.tsv”.
 Namun dia tidak dapat menyelesaikan tugas tersebut. Laporan yang diminta berupa :
 
 a. Tentukan wilayah bagian (region) mana yang memiliki keuntungan (profit) paling
-sedikit
+sedikit.
 
 b. Tampilkan 2 negara bagian (state) yang memiliki keuntungan (profit) paling
-sedikit berdasarkan hasil poin a
+sedikit berdasarkan hasil poin a.
 
 c. Tampilkan 10 produk (product name) yang memiliki keuntungan (profit) paling
-sedikit berdasarkan 2 negara bagian (state) hasil poin b
+sedikit berdasarkan 2 negara bagian (state) hasil poin b.
 
 Whits memohon kepada kalian yang sudah jago mengolah data untuk mengerjakan
 laporan tersebut.
@@ -107,10 +106,9 @@ echo -e '\n10 Produk dengan profit terendah adalah :\n'"$c"
             Sample-Superstore.tsv | ``` potongan kode tersebut dimulai dari proses pengecekan apakah kolom 11 sama dengan nilai dari firstState dan secondState kemudian array bernama totalProduct dengan indeks kolom 17 dijumlahkan dengan kolom 21 yang sebaris. Selanjutnya dilakukan looping dengan menggunakan indeks product dalam array totalProduct, yang kemudian akan dicetak isi dari array totalProduct dengan indeks product beserta nama productnya dengan pemisah berupa “==”, kemudian dilakukan sorting menggunakan sintaks ``` sort –g |``` untuk mengurutkan nilai terendah ke nilai tertinggi.``` awk -F "==" 'NR<11{print $2}'``` berguna untuk separator antar kolom yang dipisahkan dengan “==” kemudian print argumen kedua yang berada di 10 baris pertama.
 
 
-**Soal :** 
+**Soal 2:** 
 ---
-
-2. Pada suatu siang, laptop Randolf dan Afairuzr dibajak oleh seseorang dan kehilangan
+Pada suatu siang, laptop Randolf dan Afairuzr dibajak oleh seseorang dan kehilangan
 data-data penting. Untuk mencegah kejadian yang sama terulang kembali mereka
 meminta bantuan kepada Whits karena dia adalah seorang yang punya banyak ide.
 Whits memikirkan sebuah ide namun dia meminta bantuan kalian kembali agar ide
@@ -135,6 +133,7 @@ HINT: enkripsi yang digunakan adalah caesar cipher.
 Enkripsi: 
 ```bash
 #!/bin/bash
+
 create=`date '+%H'`
 create=10#$create
 filename=${1%.txt}
@@ -142,7 +141,25 @@ rotation=$((${create} % 26))
 padding=$(printf "%${rotation}s")
 newFileName=$(echo "$filename" | tr "${padding}a-z" "a-za-z" | tr "${padding}A-Z" "A-ZA-Z")
 newFileName=$newFileName.txt
-head /dev/urandom | tr -dc A-Za-z0-9 | head -c28 > $newFileName
+for((i=1;i<=28;i++))
+do
+    if (( $i % 3 == 1 ))
+    then
+        char=`head /dev/urandom | tr -dc A-Z| head -c 1`
+        password+=$char
+    fi
+    if (( $i % 3 == 2 ))
+    then
+        char=`head /dev/urandom | tr -dc a-z| head -c 1`
+        password+=$char
+    fi
+    if (( $i % 3 == 0 ))
+    then
+        char=`head /dev/urandom | tr -dc 0-9| head -c 1`
+        password+=$char
+    fi
+done
+echo "$password" > $newFileName
 ```
 **Penjelasan**
 ---
@@ -150,7 +167,9 @@ Enkripsi:
 
 ``` create=`date '+%H' ``` berguna untuk mengekstrak jam yang ada disistem untuk disimpan ke variable ```create```. Disini variabel ```create``` menginterpretasi jam sebagai bilangan oktal untuk jam 00-09 dan bilangan oktal hanya berlaku untuk digit 0-7. Jika kita mengakses pada jam 08-09 akan terjadi error sehingga untuk mengatasinya ditambah ``` create=10#$create ``` untuk membuat variable ```create``` untuk menghilangkan angka 0 didepan. ``` filename=${1%.txt} ``` untuk mengambil nama file tanpa menyertakan ekstensinya yaitu .txt.
 
-Lalu bagian ``` rotation=$((${create} % 26)) ``` berguna untuk melakukan operator aritmatika variable ```create``` modulo 26. ``` padding=$(printf "%${rotation}s") ``` berguna untuk membuat variable ``` padding ``` menyimpan hasil. ``` tr "${padding}a-z" "a-za-z" | tr "${padding}A-Z" "A-ZA-Z") ``` berguna untuk merubah isi dari variable ```filename```. Huruf di variable ```filename``` akan tershift dengan cara menambahkan huruf dengan variable ```padding``` dan disimpan di variable ```newFileName```. ```newFileName=$newFileName.txt``` akan ditambahkan ekstensi .txt dibelakang isi variable ```newFileName```. ```head /dev/urandom | tr -dc A-Za-z0-9 | head -c28 > $newFileName``` akan menghasilkan 28 karakter random berupa huruf kecil, huruf kapital dan angka dan akan di redirect/disimpan di variable ```newFileName```.
+Lalu bagian ``` rotation=$((${create} % 26)) ``` berguna untuk melakukan operator aritmatika variable ```create``` modulo 26. ``` padding=$(printf "%${rotation}s") ``` berguna untuk membuat variable ``` padding ``` menyimpan hasil. ``` tr "${padding}a-z" "a-za-z" | tr "${padding}A-Z" "A-ZA-Z") ``` berguna untuk merubah isi dari variable ```filename```. Huruf di variable ```filename``` akan tershift dengan cara menambahkan huruf dengan variable ```padding``` dan disimpan di variable ```newFileName```. ```newFileName=$newFileName.txt``` akan ditambahkan ekstensi .txt dibelakang isi variable ```newFileName```. 
+
+Lalu perintah soalnya membuat 28 karakter yang berisi **setidaknya** mempunyai huruf kecil, huruf besar, dan angka. Konsep jawaban disini adalah setiap karakter ke 1,4,7,10,13,16,19,22,25,28 pasti berisi huruf random kapital dan dimasukkan ke akhir dari isi variable ```password```. Sedangkan untuk setiap karakter ke 2,5,8,11,14,17,20,23,26 pasti berisi huruf random yang kecil dan dimasukkan ke akhir dari isi variable ```password```. Dan untuk setiap karakter ke 3,6,9,12,15,18,21,24,27 pasti berisi angka random dan dimasukkan ke akhir dari isi variable ```password```. Lalu isi string variable ```password``` akan dimasukkan ke file dengan nama variable ```newFileName```.
 
 Dekripsi: 
 ```bash
@@ -174,44 +193,14 @@ Dekripsi:
 Lalu bagian ``` rotation=$((26-(${dateModified} % 26))) ``` berguna untuk melakukan operator aritmatika variable ```dateModified``` modulo 26 lalu hasilnya dikurangi 26(Konsep dekripsi ini bukan untuk mengurangi huruf dengan bilangan yang ada di variable ```rotation``` tapi untuk menambah huruf dengan ```rotation```( bilangan 26 dikurangi variable ```dateModified```)). ``` padding=$(printf "%${rotation}s") ``` berguna untuk membuat variable ``` padding ``` menyimpan hasil. ``` tr "${padding}a-z" "a-za-z" | tr "${padding}A-Z" "A-ZA-Z") ``` berguna untuk merubah isi dari variable ```filename```. Huruf di variable ```filename``` akan tershift dengan cara menambahkan huruf dengan variable ```padding``` dan disimpan di variable ```newFileName```. ```newFileName=$newFileName.txt``` akan ditambahkan ekstensi .txt dibelakang isi variable ```newFileName```. ``` mv $1 $newFileName ``` akan merubah nama file yang ada di argumen 1 menjadi  isi dari  variable```newFileName```.
 
 
-**Soal :** 
+**Soal 3:** 
 ---
-
-3. 1 tahun telah berlalu sejak pencampakan hati Kusuma. Akankah sang pujaan hati
-kembali ke naungan Kusuma? Memang tiada maaf bagi Elen. Tapi apa daya hati yang
-sudah hancur, Kusuma masih terguncang akan sikap Elen. Melihat kesedihan Kusuma,
-kalian mencoba menghibur Kusuma dengan mengirimkan gambar kucing. [a] Maka dari
-itu, kalian mencoba membuat script untuk mendownload 28 gambar dari
-"https://loremflickr.com/320/240/cat" menggunakan command wget dan menyimpan file
-dengan nama "pdkt_kusuma_NO" (contoh: pdkt_kusuma_1, pdkt_kusuma_2,
-pdkt_kusuma_3) serta jangan lupa untuk menyimpan log messages wget kedalam
-sebuah file "wget.log". Karena kalian gak suka ribet, kalian membuat penjadwalan untuk
-
-menjalankan script download gambar tersebut. Namun, script download tersebut hanya
-berjalan[b] setiap 8 jam dimulai dari jam 6.05 setiap hari kecuali hari Sabtu Karena
-gambar yang didownload dari link tersebut bersifat random, maka ada kemungkinan
-gambar yang terdownload itu identik. Supaya gambar yang identik tidak dikira Kusuma
-sebagai spam, maka diperlukan sebuah script untuk memindahkan salah satu gambar
-identik. Setelah memilah gambar yang identik, maka dihasilkan gambar yang berbeda
-antara satu dengan yang lain. Gambar yang berbeda tersebut, akan kalian kirim ke
-Kusuma supaya hatinya kembali ceria. Setelah semua gambar telah dikirim, kalian akan
-selalu menghibur Kusuma, jadi gambar yang telah terkirim tadi akan kalian simpan
-kedalam folder /kenangan dan kalian bisa mendownload gambar baru lagi. [c] Maka dari
-itu buatlah sebuah script untuk mengidentifikasi gambar yang identik dari keseluruhan
-gambar yang terdownload tadi. Bila terindikasi sebagai gambar yang identik, maka
-sisakan 1 gambar dan pindahkan sisa file identik tersebut ke dalam folder ./duplicate
-dengan format filename "duplicate_nomor" (contoh : duplicate_200, duplicate_201).
-Setelah itu lakukan pemindahan semua gambar yang tersisa kedalam folder ./kenangan
-dengan format filename "kenangan_nomor" (contoh: kenangan_252, kenangan_253).
-Setelah tidak ada gambar di current directory, maka lakukan backup seluruh log menjadi
-ekstensi ".log.bak". Hint : Gunakan wget.log untuk membuat location.log yang isinya
-merupakan hasil dari grep "Location".
+1 tahun telah berlalu sejak pencampakan hati Kusuma. Akankah sang pujaan hati kembali ke naungan Kusuma? Memang tiada maaf bagi Elen. Tapi apa daya hati yang sudah hancur, Kusuma masih terguncang akan sikap Elen. Melihat kesedihan Kusuma, kalian mencoba menghibur Kusuma dengan mengirimkan gambar kucing. [a] Maka dari itu, kalian mencoba membuat script untuk mendownload 28 gambar dari "https://loremflickr.com/320/240/cat" menggunakan command wget dan menyimpan file dengan nama "pdkt_kusuma_NO" (contoh: pdkt_kusuma_1, pdkt_kusuma_2, pdkt_kusuma_3) serta jangan lupa untuk menyimpan log messages wget kedalam sebuah file "wget.log". Karena kalian gak suka ribet, kalian membuat penjadwalan untuk menjalankan script download gambar tersebut. Namun, script download tersebut hanya berjalan[b] setiap 8 jam dimulai dari jam 6.05 setiap hari kecuali hari Sabtu Karena gambar yang didownload dari link tersebut bersifat random, maka ada kemungkinan gambar yang terdownload itu identik. Supaya gambar yang identik tidak dikira Kusuma sebagai spam, maka diperlukan sebuah script untuk memindahkan salah satu gambar identik. Setelah memilah gambar yang identik, maka dihasilkan gambar yang berbeda antara satu dengan yang lain. Gambar yang berbeda tersebut, akan kalian kirim ke Kusuma supaya hatinya kembali ceria. Setelah semua gambar telah dikirim, kalian akan selalu menghibur Kusuma, jadi gambar yang telah terkirim tadi akan kalian simpan kedalam folder /kenangan dan kalian bisa mendownload gambar baru lagi. [c] Maka dari itu buatlah sebuah script untuk mengidentifikasi gambar yang identik dari keseluruhan gambar yang terdownload tadi. Bila terindikasi sebagai gambar yang identik, maka sisakan 1 gambar dan pindahkan sisa file identik tersebut ke dalam folder ./duplicate dengan format filename "duplicate_nomor" (contoh : duplicate_200, duplicate_201). Setelah itu lakukan pemindahan semua gambar yang tersisa kedalam folder ./kenangan dengan format filename "kenangan_nomor" (contoh: kenangan_252, kenangan_253). Setelah tidak ada gambar di current directory, maka lakukan backup seluruh log menjadi
+ekstensi ".log.bak". Hint : Gunakan wget.log untuk membuat location.log yang isinya merupakan hasil dari grep "Location".
 *Gunakan Bash, Awk dan Crontab
 
 **Jawaban**: 
 ---
-
-
 
 a)
 
@@ -234,7 +223,7 @@ done
 **Penjelasan**
 ---
 
-``` ls | sed 's/pdkt_kusuma_//' ``` berguna untuk menampilkan file yang bernama ``` pdkt_kusuma_```, dan menghilangkan nama dari suatu file jika dia memiliki nama ```pdkt_kusuma_```. Lalu perintah ``` sort -n ``` untuk mengurutkan angka dari yang terkecil ke terbesar. Karena file ``` pdkt_kusuma_``` mempunyai angka dibelakang sehingga akan terurut dari nomor terkecil ke terbesar. Lalu ``` tail -1 ``` untuk menampilkan angka terbesar dan akan di simpan di variable ```lastNumber```.
+``` ls | sed 's/pdkt_kusuma_//' ``` berguna untuk menampilkan file yang bernama ``` pdkt_kusuma_```, dan menghilangkan nama dari suatu file jika dia memiliki nama ```pdkt_kusuma_```(berarti yang tersisa hanya angka). Lalu perintah ``` sort -n ``` untuk mengurutkan angka dari yang terkecil ke terbesar. Karena file ``` pdkt_kusuma_``` mempunyai angka dibelakang sehingga akan terurut dari nomor terkecil ke terbesar. Lalu ``` tail -1 ``` untuk menampilkan angka terbesar dan akan di simpan di variable ```lastNumber```.
 
 ```
 if [[ !($lastNumber =~ [0-9]) ]];then
@@ -243,7 +232,7 @@ elif [[ ($lastNumber =~ [0-9]) && ($lastNumber =~ [a-zA-Z]) ]];then
     lastNumber=0
 fi
 ```
-Jika misalnya belum ada file bernama pdkt_kusuma yang berarti hanya ada file bernama soal3_.sh), maka variable ```lastNumber``` akan berisi nama file yang ada di folder dan tentunya itu tidak diinginkan. Dan itu artinya bahwa belum ada file bernama ``` pdkt_kusuma_angka``` terdownload. Sehingga kita membuat variable ``` lastNumber ``` menjadi 0.
+Jika misalnya belum ada file bernama pdkt_kusuma yang berarti hanya ada file bernama soal3a.sh, maka variable ```lastNumber``` akan berisi nama file yang ada di folder dan tentunya itu tidak diinginkan. Dan itu artinya bahwa belum ada file bernama ``` pdkt_kusuma_angka``` terdownload. Sehingga kita membuat variable ``` lastNumber ``` menjadi 0.
 
 ```
 for ((i=lastNumber+1; i<=lastNumber+28; i++))
@@ -313,7 +302,7 @@ berfungsi untuk menjalankan awk dengan pemisah "/" dengan pola seleksi yaitu "Lo
 awk -F "," 'a[$1]++{print $2}' | sed 's/Saving to: //g'))
 ```
 
-berfungsi untuk menjalankan awk dengan pemisah "," dan inputan berupa hasil yaitu array url dan filename dan akan dihilangkan kalimat yang mempunyai pattern "Saving to: " dan disimpan di variable loc
+berfungsi untuk menjalankan awk dengan pemisah "," dan inputan berupa hasil yaitu array url dan filename dan akan dihilangkan kalimat yang mempunyai pattern "Saving to: " dan disimpan di variable ```loc```
 
 ```
 for num in "${loc[@]}"; do
@@ -328,7 +317,7 @@ for num in "${loc[@]}"; do
     mv $newName "duplicate/"
 done
 ```
-berguna untuk mengekstrak setiap array untuk diambil angkanya dan disimpan di variable fileNumber, setelah itu menampilkan semua file yang memiliki angka sesuai dengan variable filNumber dan ditaruh di variable nameFile, lalu diganti namanya menjadi duplicate_filenumber. Setelah itu dibuat direktori bernama duplicate jika belum ada dan dipindahkan file ke direktori duplicate
+Pertama, iterasi menggunakan variable ```num``` di array yang bernama ```loc``` yang telah kita olah sebelumnya. ```fileNumber=`echo $num | sed "s/[^0-9]//g"` ```berguna untuk mengambil angkanya yang berasal dari variable ```num``` dan disimpan di variable ```fileNumber```.``` nameFile=$(ls *$fileNumber*) ``` berguna menampilkan semua file yang memiliki angka sesuai dengan variable ```filNumber``` dan ditaruh di variable ```nameFile```, lalu diganti namanya menjadi duplicate_nomor file tersebut. Setelah itu dibuat direktori bernama duplicate jika belum ada dan dipindahkan file yang isinya ada di variable ```newName``` ke direktori duplicate
 
 ```
 for file in pdkt_kusuma_*
@@ -345,4 +334,4 @@ mv "wget.log" "wget.log.bak"
 
 ```
 
-berguna untuk memilih file yang bernama ```pdkt_kusuma_```. variable fileNumber akan berisi dengan angka yang ada di nama file yang sedang dipilih yang berada di variable newName. lalu file akan diganti namanya menjadi kenangan_fileNumber dan dibuat direktori baru jika belum ada dan file yang sedang dipilih akan dipindah ke direktori baru tersebut. Lalu setelah semua proses selesai, file wget.log akan diganti menjadi wget.log.bak
+``` file in pdkt_kusuma_* ```berguna untuk mengiterasi semua file yang bernama ```pdkt_kusuma_```(jadi yang dilooping hanya file bernama pdkt_kusuma_). variable fileNumber akan berisi dengan angka yang ada di nama file pdkt_kusuma_ yang sedang diiterasi. lalu file akan diganti namanya menjadi kenangan_fileNumber dan disimpan di variable ```newName``` dan dibuat direktori baru jika belum ada yang bernama kenangan. File yang sedang dipilih akan dipindah ke direktori baru tersebut. Lalu setelah semua proses selesai, file wget.log akan diganti menjadi wget.log.bak
