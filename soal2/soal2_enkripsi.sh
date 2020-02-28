@@ -7,7 +7,7 @@ rotation=$((${create} % 26))
 padding=$(printf "%${rotation}s")
 newFileName=$(echo "$filename" | tr "${padding}a-z" "a-za-z" | tr "${padding}A-Z" "A-ZA-Z")
 newFileName=$newFileName.txt
-for((i=1;i<=3;i++))
+for((i=1;i<=28;i++))
 do
     if (( $i % 3 == 1 ))
     then
